@@ -81,16 +81,7 @@ WSGI_APPLICATION = 'neksflis.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASE_FROM_ENV = dj_database_url.config(conn_max_age=600)
-
-# DATABASE = dj_database_url.parse('postgres://hbhhdcqkfesx..', conn_max_age=600)
-DATABASE = dict(  # TODO: to be deleted.
-    ENGINE='django.db.backends.postgresql',
-    HOST='localhost',
-    NAME='neksflis',
-    USER='sezgin',
-)
-DATABASES = dict(default=DATABASE_FROM_ENV or DATABASE)
+DATABASES = {'default': dj_database_url.config(conn_max_age=600)}
 
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
 
@@ -104,7 +95,7 @@ CACHES = {
     },
 }
 
-CELERY_BROKER_URL = REDIS_URL
+CELERY_BROKER_URL = os.environ.get('CELERY_BROKER_URL', 'redis://localhost:6379/1')
 
 
 # Password validation

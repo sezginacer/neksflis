@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+    db:
+        image: postgres
+        environment:
+            - POSTGRES_DB=neksflis
+            - POSTGRES_USER=neksflis
+            - POSTGRES_PASSWORD=neksflis
+    web:
+        build: .
+        command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8080"
+        env_file: common.env
+        volumes:
+            - .:/code
+        ports:
+            - 8080:8080
+        depends_on:
+            - db
+            - redis
+    redis:
+        image: library/redis:5.0-alpine
+        ports:
+            - 6379:6379
+        restart: unless-stopped
+
+    worker:
+        build: .
+        command: celery -A neksflis worker --app=neksflis.celery:app --loglevel=info
+        restart: unless-stopped
+        env_file: common.env
+    beat:
+        build: .
+        command: celery -A neksflis beat --app=neksflis.celery:app --loglevel=info
+        restart: unless-stopped
+        env_file: common.env
