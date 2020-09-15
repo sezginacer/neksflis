@@ -181,7 +181,7 @@ def test_unsubscribe():
 
 
 def run():
-    print('Make sure you have previously run setup!')
+    print('Make sure you have run setup previously!')
     test_silver_user()
     test_gold_user()
     test_platinum_user()
