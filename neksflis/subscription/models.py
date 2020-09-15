@@ -2,7 +2,6 @@ from django.conf import settings
 from django.contrib.postgres.fields import DateTimeRangeField
 from django.db import models
 from django.utils import timezone
-from django.utils.functional import cached_property
 from django_enum_choices.fields import EnumChoiceField
 
 from neksflis.core.models import StarterModel
@@ -18,7 +17,8 @@ class Subscription(StarterModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        limit_choices_to=dict(is_staff=False, is_superuser=False)
+        limit_choices_to=dict(is_staff=False, is_superuser=False),
+        related_name='subscriptions'
     )
     payment_option = models.ForeignKey(
         'payment.PaymentOption',

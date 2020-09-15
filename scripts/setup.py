@@ -1,15 +1,20 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 
-from neksflis.account.serializers import RegisterSerializer
 from neksflis.payment.api.serializers import PaymentOptionSerializer
-from neksflis.payment.models import PaymentOption
+from neksflis.payment.models import PaymentOption, PaymentTransaction
+from neksflis.subscription.models import SubscriptionPeriodItem, Subscription
+
+User = get_user_model()
 
 
 def clean_database():
-    User.objects.all().delete()
-    Token.objects.all().delete()
-    PaymentOption.objects.all().delete()
+    models = [
+        PaymentTransaction, SubscriptionPeriodItem,
+        Subscription, PaymentOption, Token, User,
+    ]
+    for model in models:
+        model.objects.all().delete()
 
 
 def create_privileged_users():
@@ -31,22 +36,7 @@ def create_payment_option():
     serializer.create(serializer.validated_data)
 
 
-def register_user():
-    data = dict(
-        first_name='John',
-        last_name='Adams',
-        username='john.adams',
-        email='john.adams@xyz.com',
-        password='password'
-    )
-    serializer = RegisterSerializer(data=data)
-    assert serializer.is_valid()
-    user = serializer.create(serializer.validated_data)
-    Token.objects.create(user=user)
-
-
 def run():
     clean_database()
     create_privileged_users()
     create_payment_option()
-    register_user()

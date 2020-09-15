@@ -22,13 +22,15 @@ def charge_subscription(subscription_id):
         plan=subscription.plan,
         user=subscription.user
     )
-    if response.success:
-        period_item = subscription.get_period_item()
-        period_item.payment_status = PaymentStatus.COMPLETED
-        period_item.save(update_fields=['payment_status', 'updated_date'])
+    if not response.success:
+        return
 
-        transaction.subscription_period_item = period_item
-        transaction.save(update_fields=['subscription_period_item', 'updated_date'])
+    period_item = subscription.get_period_item()
+    period_item.payment_status = PaymentStatus.COMPLETED
+    period_item.save(update_fields=['payment_status', 'updated_date'])
+
+    transaction.subscription_period_item = period_item
+    transaction.save(update_fields=['subscription_period_item', 'updated_date'])
 
 
 @app.task

@@ -15,9 +15,6 @@ class PaymentOption(StarterModel):
     def get_gateway(self):
         return self.gateway.gateway_class(**self.config)
 
-    def __str__(self):
-        return f'{self.name}'
-
 
 class PaymentTransaction(StarterModel):
     transaction_id = models.CharField(max_length=128)

@@ -1,11 +1,10 @@
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
-
-from neksflis.account.models import User
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
+        model = get_user_model()
         fields = ('first_name', 'last_name', 'username', 'email', 'password')
         extra_kwargs = dict(
             first_name=dict(required=True, allow_null=False, allow_blank=False),
