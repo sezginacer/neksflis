@@ -37,7 +37,7 @@ app.conf.beat_schedule = {
         'args': (),
     },
     'cancel-unpaid-subscriptions': {
-        'task': 'neksflis.subscription.tasks.create_new_period_items',
+        'task': 'neksflis.subscription.tasks.cancel_unpaid_subscriptions',
         'schedule': crontab(minute=0, hour='*/6'),
         'args': (),
     },
